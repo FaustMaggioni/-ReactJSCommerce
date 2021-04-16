@@ -2,11 +2,14 @@ import React from 'react'
 import { AppBar, Toolbar, IconButton, Badge, MenuItem, Menu, Typography }
     from '@material-ui/core';
 import { ShoppingCart } from '@material-ui/icons'
-import useStyles from './styles'
-
-const Navbar = () => {
+import useStyles from './styles';
+import { Link, useLocation } from 'react-router-dom';
+const Navbar = ({ totalItems }) => {
 
     const classes = useStyles();
+    const location = useLocation();
+
+
 
     return (
         <div>
@@ -14,7 +17,7 @@ const Navbar = () => {
                 className={classes.appBar}
                 color='inherit' >
                 <Toolbar>
-                    <Typography variant='h6' className={classes.title} color='inherit'>
+                    <Typography component={Link} to='/' variant='h6' className={classes.title} color='inherit'>
                         <img
                             src='https://e7.pngegg.com/pngimages/750/353/png-clipart-scalable-graphics-logo-computer-icons-trade-logo-trade.png'
                             alt='CheVendo'
@@ -25,12 +28,14 @@ const Navbar = () => {
                     </Typography>
                     <div className={classes.grow}></div>
                     <div className={classes.button}></div>
-                    <IconButton aria-label='Show cart items'
+                    {location.pathname == '/' && (<IconButton aria-label='Show cart items'
+                        component={Link} to='/cart'
                         color='inherit'>
-                        <Badge badgeContent={2} color='secondary'>
+                        <Badge badgeContent={totalItems} color='secondary'>
                             <ShoppingCart />
                         </Badge>
-                    </IconButton>
+                    </IconButton>)}
+
                 </Toolbar>
             </AppBar>
         </div>

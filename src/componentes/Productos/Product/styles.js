@@ -1,8 +1,9 @@
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles';
+import { positions } from '@material-ui/system';
 
 export default makeStyles(() => ({
     root: {
-        maxWidth: '100%',
+        minWidth: '100%'
     },
     media: {
         height: 0,
@@ -11,9 +12,12 @@ export default makeStyles(() => ({
     cardActions: {
         display: 'flex',
         justifyContent: 'flex-end',
+        position: 'bottom'
     },
     cardContent: {
-        display: 'flex',
+        display: 'flex' | '',
         justifyContent: 'space-between',
-    },
-}));
+    }
+
+}
+));
