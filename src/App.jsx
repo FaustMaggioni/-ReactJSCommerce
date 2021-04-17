@@ -66,7 +66,7 @@ const App = () => {
                         />
                     </Route>
                     <Route exact path='/checkout'>
-                        <CheckOut />
+                        {cart && <CheckOut cart={cart} />}
                     </Route>
                 </Switch>
             </div >

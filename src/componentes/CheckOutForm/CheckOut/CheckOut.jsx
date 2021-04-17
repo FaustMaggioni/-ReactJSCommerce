@@ -1,17 +1,32 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Paper, Stepper, Step, StepLabel, Typography, CircularProgress, Divider, Buttton } from '@material-ui/core'
 import useStyles from './styles.js'
 import AddressForm from '../AddressForm';
 import PaymentForm from '../PaymentForm';
-
+import { commerce } from '../../../lib/commerce'
 
 
 
 const steps = ['Shipping address', 'Payment details']
 
-const CheckOut = () => {
+const CheckOut = ({ cart }) => {
     const classes = useStyles()
     const [activeStep, setActiveStep] = useState(0)
+    const [checkoutToken, setToken] = useState(null)
+
+
+    useEffect(() => {
+        const generateToken = async () => {
+            try {
+                setToken(await commerce.checkout.generateToken(cart.id, { type: 'cart' }))
+                console.log("Recibido", checkoutToken)
+            } catch (error) {
+                console.log("Error")
+            }
+        };
+        generateToken() //en useEffect no se puede hacer async, por eso la función
+    }, [cart])
+
 
     const Confirmation = () => (
         <div>
@@ -20,7 +35,7 @@ const CheckOut = () => {
     )
 
     const Form = () => (
-        activeStep == 0 ? <AddressForm /> : <PaymentForm />
+        activeStep == 0 ? <AddressForm checkoutToken={checkoutToken} /> : <PaymentForm />
     )
     return (
         <div>
@@ -35,7 +50,7 @@ const CheckOut = () => {
                             </Step>
                         ))}
                     </Stepper>
-                    {activeStep === steps.length ? <Confirmation /> : <Form />}
+                    {activeStep === steps.length ? <Confirmation /> : checkoutToken && <Form />}
                 </Paper>
             </main>
         </div>
