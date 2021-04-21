@@ -6,19 +6,21 @@ import Review from './Review'
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PK)
 
-const PaymentForm = ({ checkoutToken, backStep, onCaptureCheckout, shippingData, nextStep }) => {
+const PaymentForm = ({ timeout, checkoutToken, backStep, onCaptureCheckout, shippingData, nextStep }) => {
 
     const handleSubmit = async (event, elements, stripe) => {
-        event.preventDefault()
-        if (!stripe || !elements) {
-            return
-        }
-        const cardElement = elements.getElement(CardElement)
+        event.preventDefault();
 
-        const { error, paymentMethod } = await stripe.createPaymentMethod({ type: 'card', card: cardElement })
+        if (!stripe || !elements) return;
+
+        const cardElement = elements.getElement(CardElement);
+
+        const { error, paymentMethod } = await stripe.createPaymentMethod({ type: 'card', card: cardElement });
+
         if (error) {
-            console.log(error)
+            console.log('[error]', error);
         } else {
+            alert("AAAAAA")
             const orderData = {
                 line_items: checkoutToken.live.line_items,
                 customer: { firstname: shippingData.firstName, lastname: shippingData.lastName, email: shippingData.email },
@@ -31,10 +33,12 @@ const PaymentForm = ({ checkoutToken, backStep, onCaptureCheckout, shippingData,
                     },
                 },
             };
-            onCaptureCheckout(checkoutToken.id, orderData)
-            nextStep()
+
+            onCaptureCheckout(checkoutToken.id, orderData);
+            nextStep();
+            timeout()
         }
-    }
+    };
 
     return (
         <div>

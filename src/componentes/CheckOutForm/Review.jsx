@@ -1,6 +1,7 @@
 import React from 'react'
 import { Typography, List, ListItem, ListItemText } from '@material-ui/core'
-import CheckOut from './CheckOut/CheckOut'
+
+
 const Review = ({ checkoutToken }) => {
     return (
         <div>
